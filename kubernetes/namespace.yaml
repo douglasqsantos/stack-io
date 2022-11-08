@@ -1,0 +1,11 @@
+---
+# Create namespace;
+# k create namespace stack-io --dry-run=client -o yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: stack-io
+spec: {}
+status: {}
+...

@@ -1,0 +1,20 @@
+---
+# Create service to expose your pod;
+# kubectl expose deployment/webserver --dry-run=client -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webserver
+  name: webserver
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: webserver
+status:
+  loadBalancer: {}
+...

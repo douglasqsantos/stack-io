@@ -1,0 +1,21 @@
+diff -u -N /var/folders/ch/yqmkzw_x6pn3ybt4k6xs9w9h0000gn/T/LIVE-815896372/apps.v1.Deployment.stack-io.webserver /var/folders/ch/yqmkzw_x6pn3ybt4k6xs9w9h0000gn/T/MERGED-427308706/apps.v1.Deployment.stack-io.webserver
+--- /var/folders/ch/yqmkzw_x6pn3ybt4k6xs9w9h0000gn/T/LIVE-815896372/apps.v1.Deployment.stack-io.webserver	2022-11-08 00:24:07
++++ /var/folders/ch/yqmkzw_x6pn3ybt4k6xs9w9h0000gn/T/MERGED-427308706/apps.v1.Deployment.stack-io.webserver	2022-11-08 00:24:07
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"app":"webserver"},"name":"webserver","namespace":"stack-io"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"webserver"}},"strategy":{},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"webserver"}},"spec":{"containers":[{"image":"webserver","imagePullPolicy":"IfNotPresent","lifecycle":{"preStop":{"exec":{"command":["/bin/sh","-c","echo Killing the webserver; while kill -s TERM 1; do sleep 1; done"]}}},"livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":8080,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":3},"name":"webserver","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":8080,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":3},"resources":{"limits":{"cpu":"200m","memory":"250Mi"},"requests":{"cpu":"100m","memory":"150Mi"}}}],"initContainers":[{"command":["sh","-c","sleep 30"],"image":"busybox","name":"wait-for-30-seconds-before-starup"}]}}},"status":{}}
+   creationTimestamp: "2022-11-08T03:22:45Z"
+-  generation: 1
++  generation: 2
+   labels:
+     app: webserver
+   name: webserver
+@@ -32,7 +32,7 @@
+         app: webserver
+     spec:
+       containers:
+-      - image: webserver
++      - image: webserver:08-11-2022-00-24-04
+         imagePullPolicy: IfNotPresent
+         lifecycle:
+           preStop:

@@ -1,0 +1,77 @@
+---
+# Create deployment;
+# k create deployment webserver --image=webserver --dry-run=client -o yaml > app.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webserver
+  name: webserver
+  namespace: stack-io
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webserver
+    spec:
+      # https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+      # add init container that sleep for 30 seconds;
+      initContainers:
+      - name: wait-for-30-seconds-before-starup
+        image: busybox
+        command:  ["sh", "-c", "sleep 30"]
+      containers:
+      # Use the golang webserver image you built in the previous step;
+      - image: MY_NEW_IMAGE
+        imagePullPolicy: IfNotPresent
+        # https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+        # Add prestophook;
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","echo Killing the webserver; while kill -s TERM 1; do sleep 1; done"]
+        # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/              
+        # Add readiness/livess probe;
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3      
+        name: webserver
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/              
+        # Add readiness/livess probe;          
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3          
+        resources:
+          limits:
+            cpu: 200m
+            memory: 250Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi        
+status: {}
+...
